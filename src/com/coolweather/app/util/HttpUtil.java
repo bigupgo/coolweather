@@ -3,6 +3,8 @@ package com.coolweather.app.util;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -24,9 +26,11 @@ public class HttpUtil {
 					connection.setRequestMethod("GET");
 					connection.setConnectTimeout(8000);
                     connection.setReadTimeout(8000);	
+                    //connection.setRequestProperty("Accept-Charset", "UTF-8");
                     
                     InputStream in = connection.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                   // PrintWriter out = new PrintWriter(new OutputStreamWriter(connection.getOutputStream(),"utf-8"));  
                     String line ="";
                     StringBuilder response = new StringBuilder();
                     while((line = reader.readLine())!=null){
@@ -37,6 +41,7 @@ public class HttpUtil {
                     }
                     
 				}catch(Exception e){
+					e.printStackTrace();
 					if(listener!=null){
 						listener.onError(e);
 					}
