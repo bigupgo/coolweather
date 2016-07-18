@@ -137,10 +137,10 @@ public class WeatherActivity extends Activity implements OnClickListener {
 	 * 根据传入的地址和类型去向服务器查询天气代号或者天气信息。
 	 */
 	private void queryFromServer(final String address, final String type) {
-		HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
+		HttpUtil.sendHttpClientRequest(address, new HttpCallbackListener() {
 
 			@Override
-			public void onFinsh(String response) {
+			public void onFinsh(final String response) {
 				// TODO Auto-generated method stub
 				if ("countyCode".equals(type)) {
 					if (!TextUtils.isEmpty(response)) {
@@ -151,10 +151,18 @@ public class WeatherActivity extends Activity implements OnClickListener {
 						}
 					}
 				} else if ("weatherCode".equals(type)) {
-
-					Utility.handleWeatherResponse(WeatherActivity.this,
-							response);
-					showWeather();
+  
+					runOnUiThread(new Runnable() {
+						
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							Utility.handleWeatherResponse(WeatherActivity.this,
+									response);
+							showWeather();
+						}
+					});
+					
 				}
 			}
 
